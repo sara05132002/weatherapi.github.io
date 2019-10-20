@@ -1,6 +1,6 @@
 # weatherapi.github.io
 
-##Weather API JSON/AJAX練習
+## Weather API JSON/AJAX練習
 
 
 ![image](https://github.com/sara05132002/weatherapi.github.io/blob/master/sara05132002.github.io_weatherapi.github.io_%20(1).png)
