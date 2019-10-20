@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+	<style type="text/css">
+		body{			
+			margin: 0;
+			font-family:Microsoft JhengHei;			
+		}
+		.bodyimg{
+			height: 900px;
+			background: url(https://img.jj59.com/6/5aaf845d29ae.jpg);
+			background-position: center cover;
+			
+		}
+		
+		#weather{
+			width: 800px;
+			height: 850px;
+			margin: auto;
+			display: flex;
+		}
+		.choice{
+			text-align: center;
+			width: 50%;
+			margin: auto;
+			height: 150px;
+		}
+		.choice-line{			
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		#city{
+			width: 150px;
+			text-align: center;
+			font-size: 40px;
+			border: none;			
+		}
+		option{			
+			text-align: center;
+			font-size: 20px;
+		}
+		#btnsubmit{			
+			border: none;
+			background-color: rgba(0,0,0,0);
+		}
+		.btn{
+			cursor: pointer;
+			margin: 0 10px 0 10px;
+			vertical-align: middle;			
+		}
+		#showw{
+			margin: auto;
+			width: 50%;
+			height: 150px;
+		}
+		table{
+			width: 400px;
+			border: 1px solid white;
+			border-radius: 10px;
+			background-color: rgba(0,0,0,.3);
+			width: 80%;
+		}				
+		td{
+			border-top: 1px solid white;
+			text-align: center;
+			color: white;
+			padding: 10px 0 10px 0;
+		}
+		th{
+			color: white;
+		}
+		.today{
+			color: white;
+			font-weight: bold;
+			font-size: 20px;
+			margin:0 0 10px 0;
+		}
+		h3{			
+			color: white;
+		}		
+		#pic{
+			text-align: center;
+			display: inline-block;
+		}
+		span{
+			font-size: 20px;
+			padding: 0 10px 0 10px;
+			color: white;
+		}
+		.weather-icon{
+			padding: 0 10px 0 10px;
+		}
+		.footer{
+			position: relative;
+			background-color: rgba(0,0,0,.1);
+			height: 50px;
+			line-height: 50px;
+		}
+
+		.copytight{
+			margin: 0;
+			font-size: 16px;
+			color: #3F5D45;
+			text-align: center;
+			border-top: 2px solid #cca;
+
+		}
+
+	</style>
+</head>
+<body>
+	
+	<div class="bodyimg">
+	<div id="weather">
+		<div class="choice" id="choice">
+		<!--City:  <input id="city" value="台北" type="text"></input>-->
+			<div class="choice-line">
+				<select name="" id="city">
+			      <option value="宜蘭縣">宜蘭縣</option>
+			      <option value="花蓮縣">花蓮縣</option>
+			      <option value="臺東縣">臺東縣</option>
+			      <option value="澎湖縣">澎湖縣</option>
+			      <option value="金門縣">金門縣</option>
+			      <option value="連江縣">連江縣</option>      
+			      <option value="臺北市">臺北市</option>
+			      <option value="新北市">新北市</option>
+			      <option value="桃園市">桃園市</option>
+			      <option value="臺中市">臺中市</option>
+			      <option value="臺南市">臺南市</option>
+			      <option value="高雄市">高雄市</option>
+			      <option value="基隆市">基隆市</option>
+			      <option value="新竹市">新竹市</option>
+			      <option value="新竹縣">新竹縣</option>
+			      <option value="苗栗縣">苗栗縣</option>
+			      <option value="彰化縣">彰化縣</option>
+			      <option value="南投縣">南投縣</option>
+			      <option value="雲林縣">雲林縣</option>
+			      <option value="嘉義縣">嘉義縣</option>
+			      <option value="嘉義市">嘉義市</option>
+			      <option value="屏東縣">屏東縣</option>
+			    </select>
+		    	<button id="btnsubmit"><img src="https://img.icons8.com/material-outlined/24/000000/circled-chevron-left.png" class="btn"></button>
+			</div>
+			
+			<span id="big"></span>
+	    	<div id="pic"></div>
+			
+	    	
+	    	
+		</div>
+		<div id="showw">
+	  		<p class="today">今日天氣</p>
+	  		<div id="show"></div>
+		</div>
+
+	</div>
+	<div class="footer">
+		<p class="copytight">© 2018 weather api test</p>
+	</div>
+	</div>
+	
+<script type="text/javascript">
+	$(document).ready(function(){
+  
+  $('#btnsubmit').click(function(){
+    var city=$("#city").val();
+    var str="";
+    var picimg;
+
+    var show=document.getElementById("show");
+    var big=document.getElementById("big");
+ 	var pic=document.getElementById("pic");
+    /*清空上一筆*/
+    //show.innerHTML = ""; 
+    $('#big').html("");
+    $('#pic').html("");
+      $.ajax({
+        url:'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-9507B680-EBDB-44D3-8732-9C461E9BE3D2&format=JSON',
+        type:"GET",
+        dataType:"json",
+        success:function(data){
+
+
+          //html += '<table><tr>';
+
+          var datahtml='<table>';
+
+          for(var i=0;i<data.records.location.length;i++){            
+            if(city == data.records.location[i].locationName){
+              /*str='<h3>城市 : '+data.records.location[i].locationName+'</h3>'+
+                '<h3>天氣 : '+data.records.location[i].weatherElement[0].time[0].parameter.parameterName+'</h3>';*/
+                str='<h3>'+data.records.location[i].weatherElement[0].time[0].parameter.parameterName+'</h3>';
+
+
+                datahtml='<table id="cc"><thead><tr class="headtr"><th>'+data.records.location[i].locationName+'</th><th>溫度</th><th>降雨機率</th></tr></thead>'+
+                '<tbody><tr><td>'+data.records.location[i].weatherElement[3].time[0].parameter.parameterName+'</td><td>'+data.records.location[i].weatherElement[2].time[0].parameter.parameterName+'°c-'+data.records.location[i].weatherElement[4].time[1].parameter.parameterName+'°c</td><td>'+data.records.location[i].weatherElement[1].time[0].parameter.parameterName+'%</td></tr></tbody>';
+                if(data.records.location[i].weatherElement[0].time[0].parameter.parameterName == 10){
+                	picimg='<img src="images/summer.png" alt="" class="weather-icon" /><span>'+data.records.location[i].weatherElement[2].time[0].parameter.parameterName+'°c</span>';
+                }else if(data.records.location[i].weatherElement[1].time[0].parameter.parameterName <= 40){
+                	picimg='<img src="images/partly-cloudy.png" alt="" class="weather-icon" /><span>'+data.records.location[i].weatherElement[2].time[0].parameter.parameterName+'°c</span>';
+                }else{
+                	picimg='<img src="images/rain-cloud.png" alt="" class="weather-icon" /><span>'+data.records.location[i].weatherElement[2].time[0].parameter.parameterName+'°c</span>';
+                }
+                
+
+            }//show.innerHTML=str;
+            datahtml+='</table>';
+            $("#show").html(datahtml);
+
+
+          }big.insertAdjacentHTML('beforeend',str);
+          pic.insertAdjacentHTML('beforeend',picimg);
+          
+          
+          
+  
+        }
+      });
+      
+    
+  });
+});
+
+
+</script>
+</body>
+</html>
